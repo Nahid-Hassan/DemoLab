@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.squareup.picasso.Picasso
 
 class MainActivity : AppCompatActivity() {
 
@@ -175,6 +176,7 @@ class MainActivity : AppCompatActivity() {
                 val sunset:Long = sys.getLong("sunset")
                 val windSpeed = wind.getString("speed")
                 val weatherDescription = weather.getString("description")
+                val weatherIcon : String = weather.getString("icon")
 
                 val address = jsonObj.getString("name")+", "+sys.getString("country")
 
@@ -194,6 +196,12 @@ class MainActivity : AppCompatActivity() {
                 /* Views populated, Hiding the loader, Showing the main design */
                 findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
                 findViewById<RelativeLayout>(R.id.mainContainer).visibility = View.VISIBLE
+
+                runOnUiThread{
+                    val weatherImage : ImageView = findViewById<ImageView>(R.id.weather_icon)
+                    Picasso.get().load("https://openweathermap.org/img/wn/${weatherIcon}@2x.png").into(weatherImage)
+                    weatherImage.visibility = View.VISIBLE
+                }
 
             } catch (e: Exception) {
                 findViewById<ProgressBar>(R.id.loader).visibility = View.GONE
